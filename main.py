@@ -1,10 +1,11 @@
+import os
 import json
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import streamlit as st
 
 # Streamlit Secrets에서 자격 증명 정보 가져오기
-credentials_info = st.secrets["google_credentials"]
+credentials_info = dict(st.secrets["google_credentials"])  # 딕셔너리로 변환
 
 # 임시 파일에 자격 증명 정보 저장
 with open("temp_credentials.json", "w") as f:
@@ -74,7 +75,7 @@ if male_sheet_url and female_sheet_url:
         # st.markdown("<hr style='border:1px solid #eee;'>", unsafe_allow_html=True)
         # st.markdown("<h3 style='text-align: center;'>회원 수 통계</h3>", unsafe_allow_html=True)
         # st.markdown(f"<div style='text-align: center;'><strong>남성 회원 수</strong>: {male_row_count}명</div>", unsafe_allow_html=True)
-        # st.markdown(f"<div style='text-align: center;'><strong>여�� 회원 수</strong>: {female_row_count}명</div>", unsafe_allow_html=True)
+        # st.markdown(f"<div style='text-align: center;'><strong>여 회원 수</strong>: {female_row_count}명</div>", unsafe_allow_html=True)
 
     except gspread.exceptions.SpreadsheetNotFound:
         st.error("Spreadsheet not found. Please check the URL.")
@@ -85,5 +86,4 @@ if male_sheet_url and female_sheet_url:
         st.error(f"Error details: {str(e)}")  # 예외 메시지 출력
 
 # 임시 파일 삭제
-import os
 os.remove("temp_credentials.json")
