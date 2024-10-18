@@ -46,8 +46,8 @@ st.markdown("<h1 style='text-align: center;'>은하수 소개팅 회원 현황</
             unsafe_allow_html=True)
 
 # 사용자로부터 두 개의 스프레드시트 URL 입력 받기
-male_sheet_url = st.text_input("남성 회원 스프레드시트 URL을 입력하세요:")
-female_sheet_url = st.text_input("여성 회원 스프레드시트 URL을 입력하세요:")
+male_sheet_url = "https://docs.google.com/spreadsheets/d/10qhSG6BNsxb89JiNHo1OL95YUS8MjB6PICzVB_wXaso/edit?gid=1277522226#gid=1277522226"
+female_sheet_url = "https://docs.google.com/spreadsheets/d/1hkEnvCfXePw3Ng2QO6Pd-mOJaxha6CBGGvS32TVs03E/edit?gid=716709069#gid=716709069"
 
 # 남성 회원수 가져오기
 male_sheet_name = "남성"
