@@ -11,27 +11,21 @@ credentials_info = dict(st.secrets["google_credentials"])  # 딕셔너리로 변
 def get_google_sheet_row_count(sheet_url, sheet_name):
     try:
         # 구글 스프레드시트에 접근할 수 있는 권한 부여
-        print("Loading credentials...")
         scope = ["https://spreadsheets.google.com/feeds",
                  "https://www.googleapis.com/auth/drive"]
         creds = ServiceAccountCredentials.from_json_keyfile_dict(
             credentials_info, scope)
         client = gspread.authorize(creds)
-        print("Credentials loaded successfully.")
 
         # 스프레드시트 열기
-        print(f"Opening spreadsheet: {sheet_url}")
         sheet = client.open_by_url(sheet_url)
         worksheet = sheet.worksheet(sheet_name)
-        print(f"Worksheet '{sheet_name}' opened successfully.")
 
         # 행의 수 가져오기
         rows = worksheet.get_all_values()
         return len(rows)
     except Exception as e:
-        print(f"Error in get_google_sheet_row_count: {e}")
-        print(f"Exception type: {type(e)}")
-        print(f"Exception args: {e.args}")
+        st.error(f"Error in get_google_sheet_row_count: {e}")
         raise
 
 # 특정 닉네임의 행을 찾고, 모든 값을 이어붙이는 함수
@@ -75,9 +69,9 @@ female_sheet_name = "여성"
 if male_sheet_url and female_sheet_url:
     try:
         male_row_count = get_google_sheet_row_count(
-            male_sheet_url, male_sheet_name)-1
+            male_sheet_url, male_sheet_name) - 1
         female_row_count = get_google_sheet_row_count(
-            female_sheet_url, female_sheet_name)-1
+            female_sheet_url, female_sheet_name) - 1
 
         # 컬럼 레이아웃 사용
         col1, col2 = st.columns(2)
@@ -102,16 +96,8 @@ if male_sheet_url and female_sheet_url:
 st.markdown("<h2 style='text-align: center;'>보내는 사람 정보 입력</h2>",
             unsafe_allow_html=True)
 
-# 상태 초기화
-if "male_nickname" not in st.session_state:
-    st.session_state.male_nickname = ""
-
-if "female_nickname" not in st.session_state:
-    st.session_state.female_nickname = ""
-
 # 남성 닉네임 입력 및 버튼
-male_nickname = st.text_input(
-    "남성 닉네임을 입력하세요:", key="male_nickname", value=st.session_state.male_nickname)
+male_nickname = st.text_input("남성 닉네임을 입력하세요:", key="male_nickname")
 if st.button("남성 닉네임 보내기"):
     if male_nickname:
         result = find_and_concatenate_row(
@@ -120,13 +106,14 @@ if st.button("남성 닉네임 보내기"):
                     male_nickname}</div>", unsafe_allow_html=True)
         st.markdown(
             f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
-        st.session_state.male_nickname = ""  # 입력 폼 초기화
+
+        # 입력 필드를 초기화하기 위해 페이지를 재실행
+        st.experimental_rerun()
     else:
         st.error("닉네임을 입력하세요.")
 
 # 여성 닉네임 입력 및 버튼
-female_nickname = st.text_input(
-    "여성 닉네임을 입력하세요:", key="female_nickname", value=st.session_state.female_nickname)
+female_nickname = st.text_input("여성 닉네임을 입력하세요:", key="female_nickname")
 if st.button("여성 닉네임 보내기"):
     if female_nickname:
         result = find_and_concatenate_row(
@@ -135,6 +122,8 @@ if st.button("여성 닉네임 보내기"):
                     female_nickname}</div>", unsafe_allow_html=True)
         st.markdown(
             f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
-        st.session_state.female_nickname = ""  # 입력 폼 초기화
+
+        # 입력 필드를 초기화하기 위해 페이지를 재실행
+        st.experimental_rerun()
     else:
         st.error("닉네임을 입력하세요.")
