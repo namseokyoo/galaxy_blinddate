@@ -107,8 +107,8 @@ if st.button("남성 닉네임 보내기"):
         st.markdown(
             f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
 
-        # 입력 필드를 초기화하기 위해 페이지를 재실행
-        st.experimental_rerun()
+        # 입력 필드를 초기화하기 위해 st.session_state를 수정
+        st.session_state["male_nickname"] = ""
     else:
         st.error("닉네임을 입력하세요.")
 
@@ -123,7 +123,7 @@ if st.button("여성 닉네임 보내기"):
         st.markdown(
             f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
 
-        # 입력 필드를 초기화하기 위해 페이지를 재실행
-        st.experimental_rerun()
+        # 입력 필드를 초기화하기 위해 st.session_state를 수정
+        st.session_state["female_nickname"] = ""
     else:
         st.error("닉네임을 입력하세요.")
