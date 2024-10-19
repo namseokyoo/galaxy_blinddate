@@ -54,16 +54,41 @@ def find_and_concatenate_row(sheet_url, sheet_name, nickname):
         return f"An error occurred: {e}"
 
 
+def find_kakao_opentalk_male(sheet_url, sheet_name, nickname):
+    try:
+        scope = ["https://spreadsheets.google.com/feeds",
+                 "https://www.googleapis.com/auth/drive"]
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(
+            credentials_info, scope)
+        client = gspread.authorize(creds)
+        sheet = client.open_by_url(sheet_url)
+        worksheet = sheet.worksheet(sheet_name)
+
+        # A열에서 닉네임 찾기
+        cell = worksheet.find(nickname)
+        row_values = worksheet.row_values(cell.row)
+
+        # k 열 값 가지고 오기
+        k_value = row_values[11]
+        return k_value
+    except gspread.exceptions.CellNotFound:
+        return "닉네임을 찾을 수 없습니다."
+    except Exception as e:
+        return f"An error occurred: {e}"
+
+
 # Streamlit 앱 설정
 st.markdown("<h1 style='text-align: center;'>은하수 소개팅 회원 현황</h1>",
             unsafe_allow_html=True)
 
-# 사용자로부터 두 개의 스프레드시트 URL 입력 받기
+#  참고할 세개의 스프레드시트 URL 입력 받기
 male_sheet_url = st.secrets["sheet_urls"]["male"]
 female_sheet_url = st.secrets["sheet_urls"]["female"]
 
+
 # 남성 회원수 가져오기
 male_sheet_name = "남성"
+male_sheet_name_kakao = "통합"
 female_sheet_name = "여성"
 
 if male_sheet_url and female_sheet_url:
@@ -102,10 +127,14 @@ if st.button("남성 닉네임 보내기"):
     if male_nickname:
         result = find_and_concatenate_row(
             male_sheet_url, male_sheet_name, male_nickname)
+        result_kakao = find_kakao_opentalk_male(
+            male_sheet_url, male_sheet_name_kakao, male_nickname)
         st.markdown(f"<div style='text-align: center;'>보내는 사람: 남성, 닉네임: {
                     male_nickname}</div>", unsafe_allow_html=True)
         st.markdown(
-            f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
+            f"<div style='text-align: center;'>{result}</div>", unsafe_allow_html=True)
+        st.markdown(
+            f"<div style='text-align: center;'>{result_kakao}</div>", unsafe_allow_html=True)
     else:
         st.error("닉네임을 입력하세요.")
 
@@ -118,6 +147,6 @@ if st.button("여성 닉네임 보내기"):
         st.markdown(f"<div style='text-align: center;'>보내는 사람: 여성, 닉네임: {
                     female_nickname}</div>", unsafe_allow_html=True)
         st.markdown(
-            f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
+            f"<div style='text-align: center;'>{result}</div>", unsafe_allow_html=True)
     else:
         st.error("닉네임을 입력하세요.")
