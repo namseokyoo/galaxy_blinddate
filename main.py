@@ -104,6 +104,16 @@ if st.button("남성 닉네임 보내기"):
         result = find_and_concatenate_row(male_sheet_url, male_sheet_name, male_nickname)
         st.markdown(f"<div style='text-align: center;'>보내는 사람: 남성, 닉네임: {male_nickname}</div>", unsafe_allow_html=True)
         st.markdown(f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
+        st.session_state.male_nickname = ""  # 입력 폼 초기화
+
+        # 클립보드 복사 버튼
+        st.markdown(f"""
+            <button onclick="navigator.clipboard.writeText('{result}').then(function() {{
+                alert('결과가 클립보드에 복사되었습니다.');
+            }}, function(err) {{
+                alert('클립보드 복사에 실패했습니다.');
+            }});">결과 복사하기</button>
+        """, unsafe_allow_html=True)
     else:
         st.error("닉네임을 입력하세요.")
 
@@ -114,5 +124,15 @@ if st.button("여성 닉네임 보내기"):
         result = find_and_concatenate_row(female_sheet_url, female_sheet_name, female_nickname)
         st.markdown(f"<div style='text-align: center;'>보내는 사람: 여성, 닉네임: {female_nickname}</div>", unsafe_allow_html=True)
         st.markdown(f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
+        st.session_state.female_nickname = ""  # 입력 폼 초기화
+
+        # 클립보드 복사 버튼
+        st.markdown(f"""
+            <button onclick="navigator.clipboard.writeText('{result}').then(function() {{
+                alert('결과가 클립보드에 복사되었습니다.');
+            }}, function(err) {{
+                alert('클립보드 복사에 실패했습니다.');
+            }});">결과 복사하기</button>
+        """, unsafe_allow_html=True)
     else:
         st.error("닉네임을 입력하세요.")
