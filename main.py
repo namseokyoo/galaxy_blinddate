@@ -114,12 +114,12 @@ if male_sheet_url and female_sheet_url:
         st.error(f"Error details: {str(e)}")  # 예외 메시지 출력
 
 # 사용자 입력 섹션 추가
-st.markdown("<h2 style='text-align: center;'>보내는 사람 정보 입력</h2>",
+st.markdown("<h2 style='text-align: center;'>회원 정보 찾기</h2>",
             unsafe_allow_html=True)
 
 # 남성 닉네임 입력 및 버튼
 male_nickname = st.text_input("남성 닉네임을 입력하세요:", key="male_nickname")
-if st.button("남성 닉네임 보내기"):
+if st.button("남성 찾기"):
     if male_nickname:
         result = find_and_concatenate_row(
             male_sheet_url, male_sheet_name, male_nickname)
@@ -128,21 +128,21 @@ if st.button("남성 닉네임 보내기"):
         st.markdown(f"<div style='text-align: center;'>보내는 사람: 남성, 닉네임: {
                     male_nickname}</div>", unsafe_allow_html=True)
         st.markdown(
-            f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
-        st.markdown(f"<div style='text-align: center;'>카카오 오픈톡: {
+            f"<div style='text-align: center;'>{result}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align: center;'>{
                     result_kakao}</div>", unsafe_allow_html=True)
     else:
         st.error("닉네임을 입력하세요.")
 
 # 여성 닉네임 입력 및 버튼
 female_nickname = st.text_input("여성 닉네임을 입력하세요:", key="female_nickname")
-if st.button("여성 닉네임 보내기"):
+if st.button("여성 찾기"):
     if female_nickname:
         result = find_and_concatenate_row(
             female_sheet_url, female_sheet_name, female_nickname)
         st.markdown(f"<div style='text-align: center;'>보내는 사람: 여성, 닉네임: {
                     female_nickname}</div>", unsafe_allow_html=True)
         st.markdown(
-            f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
+            f"<div style='text-align: center;'>{result}</div>", unsafe_allow_html=True)
     else:
         st.error("닉네임을 입력하세요.")
