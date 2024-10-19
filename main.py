@@ -48,8 +48,6 @@ def find_and_concatenate_row(sheet_url, sheet_name, nickname):
         # 모든 값을 이어붙이기
         concatenated_values = ' / '.join(row_values)
         return concatenated_values
-    except gspread.exceptions.CellNotFound:
-        return "닉네임을 찾을 수 없습니다."
     except Exception as e:
         return f"An error occurred: {e}"
 
@@ -71,8 +69,6 @@ def find_kakao_opentalk_male(sheet_url, sheet_name, nickname):
         # k 열 값 가지고 오기
         k_value = row_values[11]
         return k_value
-    except gspread.exceptions.CellNotFound:
-        return "닉네임을 찾을 수 없습니다."
     except Exception as e:
         return f"An error occurred: {e}"
 
@@ -129,12 +125,9 @@ if st.button("남성 닉네임 보내기"):
             male_sheet_url, male_sheet_name, male_nickname)
         result_kakao = find_kakao_opentalk_male(
             male_sheet_url, male_sheet_name_kakao, male_nickname)
-        st.markdown(f"<div style='text-align: center;'>보내는 사람: 남성, 닉네임: {
-                    male_nickname}</div>", unsafe_allow_html=True)
-        st.markdown(
-            f"<div style='text-align: center;'>{result}</div>", unsafe_allow_html=True)
-        st.markdown(
-            f"<div style='text-align: center;'>{result_kakao}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align: center;'>보내는 사람: 남성, 닉네임: {male_nickname}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align: center;'>카카오 오픈톡: {result_kakao}</div>", unsafe_allow_html=True)
     else:
         st.error("닉네임을 입력하세요.")
 
@@ -144,9 +137,7 @@ if st.button("여성 닉네임 보내기"):
     if female_nickname:
         result = find_and_concatenate_row(
             female_sheet_url, female_sheet_name, female_nickname)
-        st.markdown(f"<div style='text-align: center;'>보내는 사람: 여성, 닉네임: {
-                    female_nickname}</div>", unsafe_allow_html=True)
-        st.markdown(
-            f"<div style='text-align: center;'>{result}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align: center;'>보내는 사람: 여성, 닉네임: {female_nickname}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
     else:
         st.error("닉네임을 입력하세요.")
