@@ -6,6 +6,8 @@ import streamlit as st
 credentials_info = dict(st.secrets["google_credentials"])  # 딕셔너리로 변환
 
 # Google Spreadsheet와 연결하는 함수
+
+
 def get_google_sheet_row_count(sheet_url, sheet_name):
     try:
         # 구글 스프레드시트에 접근할 수 있는 권한 부여
@@ -33,6 +35,8 @@ def get_google_sheet_row_count(sheet_url, sheet_name):
         raise
 
 # 특정 닉네임의 행을 찾고, 모든 값을 이어붙이는 함수
+
+
 def find_and_concatenate_row(sheet_url, sheet_name, nickname):
     try:
         scope = ["https://spreadsheets.google.com/feeds",
@@ -54,6 +58,7 @@ def find_and_concatenate_row(sheet_url, sheet_name, nickname):
         return "닉네임을 찾을 수 없습니다."
     except Exception as e:
         return f"An error occurred: {e}"
+
 
 # Streamlit 앱 설정
 st.markdown("<h1 style='text-align: center;'>은하수 소개팅 회원 현황</h1>",
@@ -97,23 +102,24 @@ if male_sheet_url and female_sheet_url:
 st.markdown("<h2 style='text-align: center;'>보내는 사람 정보 입력</h2>",
             unsafe_allow_html=True)
 
+# 상태 초기화
+if "male_nickname" not in st.session_state:
+    st.session_state.male_nickname = ""
+
+if "female_nickname" not in st.session_state:
+    st.session_state.female_nickname = ""
+
 # 남성 닉네임 입력 및 버튼
 male_nickname = st.text_input("남성 닉네임을 입력하세요:", key="male_nickname")
 if st.button("남성 닉네임 보내기"):
     if male_nickname:
-        result = find_and_concatenate_row(male_sheet_url, male_sheet_name, male_nickname)
-        st.markdown(f"<div style='text-align: center;'>보내는 사람: 남성, 닉네임: {male_nickname}</div>", unsafe_allow_html=True)
-        st.markdown(f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
+        result = find_and_concatenate_row(
+            male_sheet_url, male_sheet_name, male_nickname)
+        st.markdown(f"<div style='text-align: center;'>보내는 사람: 남성, 닉네임: {
+                    male_nickname}</div>", unsafe_allow_html=True)
+        st.markdown(
+            f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
         st.session_state.male_nickname = ""  # 입력 폼 초기화
-
-        # 클립보드 복사 버튼
-        st.markdown(f"""
-            <button onclick="navigator.clipboard.writeText('{result}').then(function() {{
-                alert('결과가 클립보드에 복사되었습니다.');
-            }}, function(err) {{
-                alert('클립보드 복사에 실패했습니다.');
-            }});">결과 복사하기</button>
-        """, unsafe_allow_html=True)
     else:
         st.error("닉네임을 입력하세요.")
 
@@ -121,18 +127,12 @@ if st.button("남성 닉네임 보내기"):
 female_nickname = st.text_input("여성 닉네임을 입력하세요:", key="female_nickname")
 if st.button("여성 닉네임 보내기"):
     if female_nickname:
-        result = find_and_concatenate_row(female_sheet_url, female_sheet_name, female_nickname)
-        st.markdown(f"<div style='text-align: center;'>보내는 사람: 여성, 닉네임: {female_nickname}</div>", unsafe_allow_html=True)
-        st.markdown(f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
+        result = find_and_concatenate_row(
+            female_sheet_url, female_sheet_name, female_nickname)
+        st.markdown(f"<div style='text-align: center;'>보내는 사람: 여성, 닉네임: {
+                    female_nickname}</div>", unsafe_allow_html=True)
+        st.markdown(
+            f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
         st.session_state.female_nickname = ""  # 입력 폼 초기화
-
-        # 클립보드 복사 버튼
-        st.markdown(f"""
-            <button onclick="navigator.clipboard.writeText('{result}').then(function() {{
-                alert('결과가 클립보드에 복사되었습니다.');
-            }}, function(err) {{
-                alert('클립보드 복사에 실패했습니다.');
-            }});">결과 복사하기</button>
-        """, unsafe_allow_html=True)
     else:
         st.error("닉네임을 입력하세요.")
