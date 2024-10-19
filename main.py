@@ -67,7 +67,7 @@ def find_kakao_opentalk_male(sheet_url, sheet_name, nickname):
         row_values = worksheet.row_values(cell.row)
 
         # k 열 값 가지고 오기
-        k_value = row_values[11]
+        k_value = row_values[10]
         return k_value
     except Exception as e:
         return f"An error occurred: {e}"
@@ -125,9 +125,12 @@ if st.button("남성 닉네임 보내기"):
             male_sheet_url, male_sheet_name, male_nickname)
         result_kakao = find_kakao_opentalk_male(
             male_sheet_url, male_sheet_name_kakao, male_nickname)
-        st.markdown(f"<div style='text-align: center;'>보내는 사람: 남성, 닉네임: {male_nickname}</div>", unsafe_allow_html=True)
-        st.markdown(f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
-        st.markdown(f"<div style='text-align: center;'>카카오 오픈톡: {result_kakao}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align: center;'>보내는 사람: 남성, 닉네임: {
+                    male_nickname}</div>", unsafe_allow_html=True)
+        st.markdown(
+            f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align: center;'>카카오 오픈톡: {
+                    result_kakao}</div>", unsafe_allow_html=True)
     else:
         st.error("닉네임을 입력하세요.")
 
@@ -137,7 +140,9 @@ if st.button("여성 닉네임 보내기"):
     if female_nickname:
         result = find_and_concatenate_row(
             female_sheet_url, female_sheet_name, female_nickname)
-        st.markdown(f"<div style='text-align: center;'>보내는 사람: 여성, 닉네임: {female_nickname}</div>", unsafe_allow_html=True)
-        st.markdown(f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align: center;'>보내는 사람: 여성, 닉네임: {
+                    female_nickname}</div>", unsafe_allow_html=True)
+        st.markdown(
+            f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
     else:
         st.error("닉네임을 입력하세요.")
