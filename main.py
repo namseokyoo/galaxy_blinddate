@@ -102,8 +102,16 @@ if male_sheet_url and female_sheet_url:
 st.markdown("<h2 style='text-align: center;'>보내는 사람 정보 입력</h2>",
             unsafe_allow_html=True)
 
+# 상태 초기화
+if "male_nickname" not in st.session_state:
+    st.session_state.male_nickname = ""
+
+if "female_nickname" not in st.session_state:
+    st.session_state.female_nickname = ""
+
 # 남성 닉네임 입력 및 버튼
-male_nickname = st.text_input("남성 닉네임을 입력하세요:", key="male_nickname")
+male_nickname = st.text_input(
+    "남성 닉네임을 입력하세요:", key="male_nickname", value=st.session_state.male_nickname)
 if st.button("남성 닉네임 보내기"):
     if male_nickname:
         result = find_and_concatenate_row(
@@ -117,7 +125,8 @@ if st.button("남성 닉네임 보내기"):
         st.error("닉네임을 입력하세요.")
 
 # 여성 닉네임 입력 및 버튼
-female_nickname = st.text_input("여성 닉네임을 입력하세요:", key="female_nickname")
+female_nickname = st.text_input(
+    "여성 닉네임을 입력하세요:", key="female_nickname", value=st.session_state.female_nickname)
 if st.button("여성 닉네임 보내기"):
     if female_nickname:
         result = find_and_concatenate_row(
