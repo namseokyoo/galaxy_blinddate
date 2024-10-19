@@ -6,8 +6,6 @@ import streamlit as st
 credentials_info = dict(st.secrets["google_credentials"])  # 딕셔너리로 변환
 
 # Google Spreadsheet와 연결하는 함수
-
-
 def get_google_sheet_row_count(sheet_url, sheet_name):
     try:
         # 구글 스프레드시트에 접근할 수 있는 권한 부여
@@ -34,6 +32,28 @@ def get_google_sheet_row_count(sheet_url, sheet_name):
         print(f"Exception args: {e.args}")
         raise
 
+# 특정 닉네임의 행을 찾고, 모든 값을 이어붙이는 함수
+def find_and_concatenate_row(sheet_url, sheet_name, nickname):
+    try:
+        scope = ["https://spreadsheets.google.com/feeds",
+                 "https://www.googleapis.com/auth/drive"]
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(
+            credentials_info, scope)
+        client = gspread.authorize(creds)
+        sheet = client.open_by_url(sheet_url)
+        worksheet = sheet.worksheet(sheet_name)
+
+        # A열에서 닉네임 찾기
+        cell = worksheet.find(nickname)
+        row_values = worksheet.row_values(cell.row)
+
+        # 모든 값을 이어붙이기
+        concatenated_values = ' / '.join(row_values)
+        return concatenated_values
+    except gspread.exceptions.CellNotFound:
+        return "닉네임을 찾을 수 없습니다."
+    except Exception as e:
+        return f"An error occurred: {e}"
 
 # Streamlit 앱 설정
 st.markdown("<h1 style='text-align: center;'>은하수 소개팅 회원 현황</h1>",
@@ -81,8 +101,9 @@ st.markdown("<h2 style='text-align: center;'>보내는 사람 정보 입력</h2>
 male_nickname = st.text_input("남성 닉네임을 입력하세요:", key="male_nickname")
 if st.button("남성 닉네임 보내기"):
     if male_nickname:
-        st.markdown(f"<div style='text-align: center;'>보내는 사람: 남성, 닉네임: {
-                    male_nickname}</div>", unsafe_allow_html=True)
+        result = find_and_concatenate_row(male_sheet_url, male_sheet_name, male_nickname)
+        st.markdown(f"<div style='text-align: center;'>보내는 사람: 남성, 닉네임: {male_nickname}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
     else:
         st.error("닉네임을 입력하세요.")
 
@@ -90,7 +111,8 @@ if st.button("남성 닉네임 보내기"):
 female_nickname = st.text_input("여성 닉네임을 입력하세요:", key="female_nickname")
 if st.button("여성 닉네임 보내기"):
     if female_nickname:
-        st.markdown(f"<div style='text-align: center;'>보내는 사람: 여성, 닉네임: {
-                    female_nickname}</div>", unsafe_allow_html=True)
+        result = find_and_concatenate_row(female_sheet_url, female_sheet_name, female_nickname)
+        st.markdown(f"<div style='text-align: center;'>보내는 사람: 여성, 닉네임: {female_nickname}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align: center;'>결과: {result}</div>", unsafe_allow_html=True)
     else:
         st.error("닉네임을 입력하세요.")
